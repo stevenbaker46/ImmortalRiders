@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Immortal Riders — Members</title>
+  <meta name="description" content="Immortal Riders members portal."/>
+  <link rel="icon" href="../assets/patch.webp"/>
+  <link rel="stylesheet" href="../styles.css"/>
+  <style>
+    .auth-grid{display:grid;grid-template-columns:1fr;gap:14px}
+    .field{display:grid;gap:8px}
+    .field label{font-size:13px;color:var(--muted)}
+    .field input{background:#0c0d12;border:1px solid #1b1d26;border-radius:12px;color:var(--text);padding:12px 12px;font-size:15px;outline:none}
+    .field input:focus{border-color:rgba(198,40,40,.7);box-shadow:0 0 0 3px rgba(198,40,40,.12)}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .note{color:var(--muted);font-size:13px;line-height:1.45}
+    .err{color:#ffb4b4;font-size:13px;margin-top:6px;display:none}
+    .ok{color:#bfffbf;font-size:13px;margin-top:6px;display:none}
+    .rsvp-card{display:grid;gap:10px}
+    .rsvp-actions{display:flex;gap:10px;flex-wrap:wrap}
+    .btn.small{padding:10px 12px;border-radius:12px}
+    .tag{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+    .tag b{color:var(--text)}
+    .list{display:grid;gap:10px}
+    .list-item{border:1px solid #1b1d26;background:#0c0d12;border-radius:12px;padding:12px}
+    .list-item .meta{color:var(--muted);font-size:13px}
+    .divider{height:1px;background:#1b1d26;margin:6px 0}
+    /* Members page header (avoid using .hero to prevent site-hero styles) */
+    .pagehead{padding:18px 0 10px}
+    .pagehead h1{margin:0 0 6px;font-size:2rem}
+    .pagehead .sub{margin:0}
+  </style>
+</head>
+<body class="members">
+<div class="navbar" role="navigation" aria-label="Primary">
+  <div class="container">
+    <div class="logo-mini">
+      <img src="../assets/patch.webp" alt="Immortal Riders patch"/>
+      <a href="../index.html" aria-label="Immortal Riders Home"><strong>Immortal Riders</strong></a>
+    </div>
+    <nav>
+      <a href="../index.html">Home</a>
+      <a href="../index.html#about">About</a>
+      <a href="../index.html#rides">Events</a>
+      <a href="../index.html#intake">Join</a>
+      <a href="../index.html#contact">Contact</a>
+      <a href="./index.html" class="nav-pill">Members</a>
+    </nav>
+  </div>
+</div>
+
+  <main class="container" style="padding:26px 20px 60px">
+    <div class="pagehead">
+      <h1 style="margin:0 0 6px">Members Portal</h1>
+      <p class="sub" style="margin:0">Login to RSVP for rides and view member-only updates.</p>
+    </div>
+
+    <!-- LOGIN -->
+    <section id="gate" class="grid" style="margin-top:16px">
+      <div class="card">
+        <h2 style="margin:0 0 10px">Sign in</h2>
+        <p class="sub" style="margin:0 0 14px">Use your email and password.</p>
+
+        <div class="auth-grid">
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" type="email" placeholder="name@email.com" autocomplete="username"/>
+          </div>
+          <div class="field">
+            <label for="pw">Password</label>
+            <input id="pw" type="password" placeholder="Password" autocomplete="current-password"/>
+          </div>
+          <div class="row">
+            <button class="btn" id="loginBtn">Login</button>
+            <button class="btn secondary" id="demoBtn" type="button">Use saved login</button>
+          </div>
+          <div class="err" id="err"></div>
+          <p class="note" style="margin:0">
+            ⚠️ This members login is currently <b>static-site</b> based. For real security + shared RSVPs,
+            we can upgrade this to Firebase/Supabase (recommended).
+          </p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 style="margin:0 0 10px">How it works</h2>
+        <p class="sub" style="margin:0 0 10px">
+          • Login with your email<br/>
+          • RSVP “Yes/No/Maybe” to events<br/>
+          • See the RSVP list
+        </p>
+        <div class="divider"></div>
+        <p class="note" style="margin:0">
+          Admin can export RSVP data as a file. If you want RSVPs shared automatically across all members/devices,
+          tell me and I’ll wire the database version.
+        </p>
+      </div>
+    </section>
+
+    <!-- MEMBER CONTENT -->
+    <section id="memberContent" class="grid" style="display:none;margin-top:16px">
+      <div class="card">
+        <div class="row" style="justify-content:space-between;align-items:center">
+          <div class="tag">Signed in as <b id="who"></b></div>
+          <div class="row">
+            <button class="btn secondary" id="exportBtn">Export RSVPs</button>
+            <button class="btn" id="logoutBtn">Logout</button>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <h2 style="margin:0 0 10px">RSVP</h2>
+        <p class="sub" style="margin:0 0 14px">Tap your response for each event.</p>
+        <div id="events" class="list"></div>
+      </div>
+
+      <div class="card">
+        <h2 style="margin:0 0 10px">RSVP List</h2>
+        <p class="sub" style="margin:0 0 14px">What members have replied so far (from this device’s storage).</p>
+        <div id="rsvpList" class="list"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="./members-data.js"></script>
+  <script src="./members-app.js"></script>
+</body>
+</html>

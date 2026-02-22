@@ -1,0 +1,30 @@
+[
+  {
+    "title": "Meeting: Dixieland Grill",
+    "startLocal": "2026-02-22T11:00",
+    "endLocal": "2026-03-01T12:00",
+    "meet": "Dixieland, Chiefswood Rd, Ohsweken ON N0A 1M0.",
+    "mapsQuery": "Chiefswood Rd, Ohsweken ON N0A 1M0"
+  },
+  {
+    "title": "Bikes On The Road",
+    "startLocal": "2026-03-01T09:30",
+    "endLocal": "2026-03-14T12:00",
+    "meet": "1180 Highway #2 West, Ancaster, ON, L9G 3K9",
+    "mapsQuery": "1180 Highway #2 West, Ancaster, ON, L9G 3K9"
+  },
+  {
+    "title": "Niagara Parkway Run",
+    "startLocal": "2026-03-28T11:00",
+    "endLocal": "2026-03-28T14:00",
+    "meet": "135 Taylor Rd, Niagara-on-the-Lake ON L0S 1J0.",
+    "mapsQuery": "135 Taylor Rd, Niagara-on-the-Lake ON L0S 1J0"
+  },
+  {
+    "title": "Port Dover Ride",
+    "startLocal": "2026-04-10T10:00",
+    "endLocal": "2026-04-10T13:00",
+    "meet": "1 St Andrew St, Port Dover ON",
+    "mapsQuery": "1 St Andrew St Port Dover ON"
+  }
+]

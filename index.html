@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Immortal Riders — Rides, Intake & Waiver</title>
+  <meta name="description" content="Immortal Riders — ride schedule, member intake upload, and waiver in one clean mobile-first site."/>
+  <meta name="theme-color" content="#0b0b0d"/>
+
+  <!-- Social preview -->
+  <meta property="og:title" content="Immortal Riders"/>
+  <meta property="og:description" content="Ride united. Ride safe."/>
+  <meta property="og:image" content="assets/patch.png"/>
+  <meta property="og:type" content="website"/>
+
+  <link rel="icon" href="assets/patch.webp"/>
+  <link rel="preload" as="image" href="assets/hero-fallback.webp"/>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <a class="skip" href="#top">Skip to content</a>
+
+  <div class="navbar" role="navigation" aria-label="Primary">
+    <div class="container">
+      <div class="logo-mini">
+        <img src="assets/patch.webp" alt="Immortal Riders patch"/>
+        <a href="#top" aria-label="Immortal Riders Home"><strong>Immortal Riders</strong></a>
+      </div>
+      <nav>
+        <a href="#top">Home</a>
+        <a href="#about">About</a>
+        <a href="#rides">Events</a>
+        <a href="#intake">Join</a>
+        <a href="#contact">Contact</a>
+        <a href="members/" class="nav-pill">Members</a>
+      </nav>
+    </div>
+  </div>
+
+  <header id="top" class="hero" aria-label="Hero">
+    <video id="heroVideo" autoplay muted loop playsinline poster="assets/hero-fallback.jpg">
+      <source src="assets/fire-hero.webm" type="video/webm"/>
+      <source src="assets/fire-hero.mp4" type="video/mp4"/>
+    </video>
+    <div class="overlay"></div>
+    <div class="inner container">
+      <img class="patch" src="assets/patch.webp" alt="Immortal Riders logo"/>
+      <span class="badge">FOUNDED 2026 • BROTHERHOOD ABOVE ALL</span>
+      <h1>IMMORTAL RIDERS</h1>
+      <p class="lead">A tight crew built on loyalty, respect, and the open road. Check upcoming events or log in to the members area.</p>
+      <div class="cta">
+        <a class="btn primary" href="members/">Member Login</a>
+        <a class="btn secondary" href="#rides">Upcoming Events</a>
+      </div>
+      <p class="small muted" style="max-width:760px;margin:8px auto 0">New member? Complete the intake (license/insurance + waiver) in under 2 minutes.</p>
+    </div>
+    <div class="scroll-cue" aria-hidden="true">Scroll</div>
+  </header>
+
+  <main>
+    <section id="about" class="alt">
+      <div class="container">
+        <h2>About the Brotherhood</h2>
+        <div class="grid two">
+          <div class="card">
+            <h3 style="margin-top:0">Who We Are</h3>
+            <p class="muted" style="margin:0">Immortal Riders is a brotherhood of riders built on loyalty, respect, and discipline. We keep it organized: formation riding, comms, hand signals, and gear standards — so everyone gets home safe.</p>
+          </div>
+          <div class="card">
+            <h3 style="margin-top:0">Founded in 2026</h3>
+            <ul style="margin:0.4rem 0 0 1.1rem">
+              <li><strong>Region:</strong> Ontario</li>
+              <li><strong>Values:</strong> Brotherhood • Respect • Freedom</li>
+              <li><strong>Culture:</strong> Protect the pack, ride within your limits</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="safety">
+      <div class="container">
+        <h2>Safety & Requirements</h2>
+        <div class="grid two">
+          <div class="card">
+            <ul>
+              <li>Valid motorcycle license</li>
+              <li>Current insurance</li>
+              <li>Roadworthy bike — tires, lights, fluids</li>
+              <li>Proper riding gear: DOT helmet, gloves, jacket</li>
+            </ul>
+          </div>
+          <div class="card">
+            <ul>
+              <li>Ride within skill level; follow group lead</li>
+              <li>Obey traffic laws at all times</li>
+              <li>First Aid certification (optional but encouraged)</li>
+              <li>Zero tolerance for reckless riding</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="rides" class="alt">
+      <div class="container">
+        <div class="rides-head">
+          <div>
+            <h2>Events & Ride Schedule</h2>
+            <p class="lead">Upcoming rides and meet‑ups. Times are local. Tap <strong>Open in Maps</strong> or download the calendar invite.</p>
+          </div>
+          <button class="btn tertiary" id="copyNextRide" type="button" aria-label="Copy next ride details">Copy Next Ride</button>
+        </div>
+
+        <div id="ridesList" class="grid two" aria-live="polite"></div>
+        <p class="small muted" style="margin-top:14px">Tip: tap <strong>+ Calendar</strong> to download an .ics file that works with iPhone/Android/Outlook.</p>
+      </div>
+    </section>
+
+    <section id="intake">
+      <div class="container">
+        <h2>Member Intake — Upload & Sign</h2>
+        <p class="lead">If the embedded form doesn’t load below, <a href="https://form.jotform.com/jsform/260463861533054" target="_blank" rel="noopener">open it directly</a>.</p>
+        <div class="embed" style="padding-top:0">
+          <!-- Jotform SCRIPT EMBED (required for modern upload fields) -->
+          <script type="text/javascript" src="https://form.jotform.com/jsform/260463861533054"></script>
+        </div>
+      </div>
+    </section>
+
+    <section id="waiver" class="alt">
+      <div class="container">
+        <h2>Liability Waiver (Summary)</h2>
+        <div class="card">
+          Motorcycling involves inherent risks. By joining rides, you assume these risks, certify proper licensing/insurance, agree to obey traffic laws, and release/hold harmless Immortal Riders. Review and sign the full waiver in the form above.
+          <div class="cta" style="margin-top:16px">
+            <a class="btn primary" href="#intake">Sign Waiver</a>
+            <a class="btn secondary" href="https://form.jotform.com/jsform/260463861533054" target="_blank" rel="noopener">Open in a New Tab</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container">
+        <h2>Contact</h2>
+        <div class="grid two">
+          <div class="card">
+            <h3 style="margin-top:0">General</h3>
+            <p class="muted" style="margin:0 0 10px">For questions, ride info, or membership: reach out to an officer or message the club social page.</p>
+            <div class="cta" style="justify-content:flex-start">
+              <a class="btn secondary" href="#intake">New Member Intake</a>
+              <a class="btn tertiary" href="members/">Members Login</a>
+            </div>
+            <p class="small muted" style="margin-top:12px">Tip: swap the links below with your real pages.</p>
+          </div>
+          <div class="card">
+            <h3 style="margin-top:0">Social</h3>
+            <ul style="margin:.2rem 0 .2rem 1.1rem">
+              <li><a href="#" class="link">Instagram (add link)</a></li>
+              <li><a href="#" class="link">Facebook (add link)</a></li>
+              <li><a href="#" class="link">Group Chat / Discord (add link)</a></li>
+            </ul>
+            <p class="small muted" style="margin-top:10px">Want a real contact form that emails you? Tell me the address you want it to send to and I’ll wire it up.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">
+            <img src="assets/patch.webp" alt="Immortal Riders patch"/>
+            <div>
+              <strong>Immortal Riders</strong>
+              <div class="small muted">Founded 2026 • Ontario</div>
+            </div>
+          </div>
+          <p class="small muted" style="margin-top:12px;max-width:520px">Ride united. Ride safe. Protect the pack.</p>
+        </div>
+
+        <div>
+          <div class="footer-title">Quick Links</div>
+          <a class="footer-link" href="#about">About</a>
+          <a class="footer-link" href="#rides">Events</a>
+          <a class="footer-link" href="#intake">Join</a>
+          <a class="footer-link" href="#waiver">Waiver</a>
+        </div>
+
+        <div>
+          <div class="footer-title">Members</div>
+          <a class="footer-link" href="members/">Member Login</a>
+          <a class="footer-link" href="members/">Announcements</a>
+          <a class="footer-link" href="members/">Downloads</a>
+          <a class="footer-link" href="#contact">Contact</a>
+        </div>
+      </div>
+
+      <div class="footer-bottom small">© <span id="year"></span> Immortal Riders • All Rights Reserved</div>
+    </div>
+  </footer>
+
+  <script>
+    // --- Hero video graceful fallback (keeps poster/background if video missing) ---
+    (function () {
+      const vid = document.getElementById('heroVideo');
+      if (!vid) return;
+      const fail = () => document.documentElement.classList.add('no-hero-video');
+      vid.addEventListener('error', fail);
+      // If sources 404, some browsers won't throw error immediately — nudge with a timeout.
+      setTimeout(() => {
+        try {
+          if (vid.readyState === 0 && vid.networkState === 3) fail();
+        } catch (_) {}
+      }, 800);
+    })();
+
+    // --- Parallax patch ---
+    const patch = document.querySelector('.hero .patch');
+    window.addEventListener('scroll', () => {
+      const y = Math.min(12, window.scrollY * 0.05);
+      if (patch) patch.style.setProperty('--parY', y + 'px');
+    }, { passive: true });
+
+    // --- Ride data ---
+// Edit /data/events.json to update the schedule (easier than editing this page).
+// If the JSON can't be loaded, we fall back to this default list.
+const DEFAULT_RIDES = [
+  {
+    title: 'Season Opener: Lakeshore Loop',
+    startLocal: '2026-03-01T10:00',
+    endLocal: '2026-03-01T12:00',
+    meet: 'Tim Hortons, 123 King St.',
+    mapsQuery: 'Tim Hortons 123 King St'
+  },
+  {
+    title: 'Niagara Parkway Run',
+    startLocal: '2026-03-14T09:30',
+    endLocal: '2026-03-14T12:00',
+    meet: 'Shell at QEW & 50 Rd',
+    mapsQuery: 'Shell QEW and 50 Rd'
+  },
+  {
+    title: 'Forks of the Credit',
+    startLocal: '2026-03-28T11:00',
+    endLocal: '2026-03-28T14:00',
+    meet: 'Starbucks, 456 Queen St.',
+    mapsQuery: 'Starbucks 456 Queen St'
+  }
+];
+
+let rides = [];
+
+async function loadRides() {
+  try {
+    const res = await fetch('data/events.json', { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    if (!Array.isArray(data)) throw new Error('events.json must be an array');
+    return data;
+  } catch (err) {
+    console.warn('[rides] Using DEFAULT_RIDES. Reason:', err);
+    return DEFAULT_RIDES;
+  }
+}
+
+    const fmtDate = (isoLocal) => {
+      const d = new Date(isoLocal);
+      return d.toLocaleString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+    };
+
+    const fmtTime = (isoLocal) => {
+      const d = new Date(isoLocal);
+      return d.toLocaleString(undefined, { hour: 'numeric', minute: '2-digit' });
+    };
+
+    const icsDate = (d) => {
+      // iCalendar in local time (floating) so phone imports as local
+      const pad = (n) => String(n).padStart(2, '0');
+      return (
+        d.getFullYear() +
+        pad(d.getMonth() + 1) +
+        pad(d.getDate()) +
+        'T' +
+        pad(d.getHours()) +
+        pad(d.getMinutes()) +
+        '00'
+      );
+    };
+
+    const makeICS = (ride) => {
+      const start = new Date(ride.startLocal);
+      const end = new Date(ride.endLocal);
+      const uid = `${ride.startLocal}-${ride.title}`.replace(/[^a-z0-9\-]/gi, '') + '@immortal-riders';
+      const lines = [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//Immortal Riders//Ride Schedule//EN',
+        'CALSCALE:GREGORIAN',
+        'METHOD:PUBLISH',
+        'BEGIN:VEVENT',
+        `UID:${uid}`,
+        `DTSTAMP:${icsDate(new Date())}`,
+        `DTSTART:${icsDate(start)}`,
+        `DTEND:${icsDate(end)}`,
+        `SUMMARY:${ride.title}`,
+        `LOCATION:${ride.meet}`,
+        `DESCRIPTION:Meet at ${ride.meet}`,
+        'END:VEVENT',
+        'END:VCALENDAR'
+      ];
+      return lines.join('\r\n');
+    };
+
+    const downloadICS = (ride) => {
+      const blob = new Blob([makeICS(ride)], { type: 'text/calendar;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${ride.title.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}-${ride.startLocal.slice(0,10)}.ics`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    };
+
+    const ridesList = document.getElementById('ridesList');
+
+async function initRidesUI() {
+  rides = await loadRides();
+  if (!ridesList) return;
+
+  ridesList.innerHTML = rides
+    .map((r) => {
+      const date = fmtDate(r.startLocal);
+      const time = fmtTime(r.startLocal);
+      const maps = `https://maps.google.com/?q=${encodeURIComponent(r.mapsQuery)}`;
+      return `
+        <div class="ride-card">
+          <strong>${date} — ${time}</strong><br/>
+          <em>${r.title}</em><br/>
+          Meet: ${r.meet}
+          <div class="ride-actions">
+            <a class="pill" href="${maps}" target="_blank" rel="noopener">Open in Maps</a>
+            <button class="pill" type="button" data-ics="${encodeURIComponent(r.title)}" aria-label="Download calendar invite">+ Calendar</button>
+          </div>
+        </div>
+      `;
+    })
+    .join('');
+
+  // Wire calendar buttons
+  ridesList.querySelectorAll('button[data-ics]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const title = decodeURIComponent(btn.getAttribute('data-ics') || '');
+      const ride = rides.find((x) => x.title === title);
+      if (ride) downloadICS(ride);
+    });
+  });
+}
+
+initRidesUI();
+
+
+    // Copy next ride details
+    const nextRideBtn = document.getElementById('copyNextRide');
+    if (nextRideBtn) {
+      nextRideBtn.addEventListener('click', async () => {
+        const now = new Date();
+        const upcoming = rides
+          .map((r) => ({ ...r, start: new Date(r.startLocal) }))
+          .filter((r) => r.start > now)
+          .sort((a, b) => a.start - b.start)[0];
+        if (!upcoming) return;
+        const text = `Next ride: ${upcoming.title}\nWhen: ${fmtDate(upcoming.startLocal)} @ ${fmtTime(upcoming.startLocal)}\nMeet: ${upcoming.meet}`;
+        try {
+          await navigator.clipboard.writeText(text);
+          nextRideBtn.textContent = 'Copied';
+          setTimeout(() => (nextRideBtn.textContent = 'Copy Next Ride'), 1200);
+        } catch (_) {
+          alert(text);
+        }
+      });
+    }
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
