@@ -1,0 +1,15 @@
+{
+  "month": "February 2026",
+  "member": {
+    "name": "Cash & Buck “Founders”",
+    "chapter": "Hamilton",
+    "photo": "assets/spotlight-john.jpg",
+    "why": "Always first to help, last to leave, and brings the energy to every ride.",
+    "highlights": [
+      "Led 3 group rides safely",
+      "Helped organize the Port Dover meetup",
+      "Supported two members in need"
+    ],
+    "quote": "Ride hard, ride safe, and look out for each other."
+  }
+}

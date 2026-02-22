@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Member Spotlight</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .spotlight-wrap { max-width: 980px; margin: 0 auto; padding: 24px; }
+    .spotlight-card { display: grid; gap: 18px; grid-template-columns: 260px 1fr; }
+    .spotlight-photo {
+      width: 100%; aspect-ratio: 1 / 1; object-fit: cover;
+      border-radius: 14px; border: 1px solid rgba(255,255,255,.12);
+    }
+    .spotlight-meta { opacity: .9; font-size: 14px; margin-top: 4px; }
+    .spotlight-title { margin: 0; font-size: 34px; letter-spacing: .5px; }
+    .spotlight-month { opacity: .85; margin: 6px 0 18px; }
+    .spotlight-why { font-size: 16px; line-height: 1.55; }
+    .spotlight-list { margin: 14px 0 0; padding-left: 18px; }
+    blockquote {
+      margin: 18px 0 0; padding: 14px 16px;
+      border-left: 4px solid rgba(255,255,255,.22);
+      background: rgba(255,255,255,.06);
+      border-radius: 10px;
+      font-style: italic;
+    }
+    @media (max-width: 760px) {
+      .spotlight-card { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="spotlight-wrap">
+    <h1 class="spotlight-title">Member Spotlight</h1>
+    <p class="spotlight-month" id="month"></p>
+
+    <section class="spotlight-card">
+      <div>
+        <img id="photo" class="spotlight-photo" alt="Spotlight member photo" />
+      </div>
+      <div>
+        <h2 id="name" style="margin:0;"></h2>
+        <div class="spotlight-meta" id="meta"></div>
+
+        <p class="spotlight-why" id="why"></p>
+
+        <h3 style="margin: 18px 0 8px;">Highlights</h3>
+        <ul class="spotlight-list" id="highlights"></ul>
+
+        <blockquote id="quote"></blockquote>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    async function loadSpotlight() {
+      const res = await fetch("data/spotlight.json", { cache: "no-store" });
+      const data = await res.json();
+
+      document.getElementById("month").textContent = data.month || "";
+      document.getElementById("name").textContent = data.member?.name || "Member";
+      document.getElementById("meta").textContent =
+        [data.member?.chapter ? `Chapter: ${data.member.chapter}` : ""].filter(Boolean).join(" • ");
+
+      const photo = document.getElementById("photo");
+      photo.src = data.member?.photo || "assets/hero-fallback.jpg";
+
+      document.getElementById("why").textContent = data.member?.why || "";
+
+      const ul = document.getElementById("highlights");
+      ul.innerHTML = "";
+      (data.member?.highlights || []).forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        ul.appendChild(li);
+      });
+
+      const quote = data.member?.quote ? `“${data.member.quote}”` : "";
+      document.getElementById("quote").textContent = quote;
+      document.getElementById("quote").style.display = quote ? "block" : "none";
+    }
+
+    loadSpotlight().catch(err => {
+      console.error(err);
+      document.getElementById("month").textContent = "Could not load spotlight.";
+    });
+  </script>
+</body>
+</html>
