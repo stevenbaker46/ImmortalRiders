@@ -12,9 +12,15 @@
   <meta property="og:description" content="Ride united. Ride safe."/>
   <meta property="og:image" content="assets/patch.png"/>
   <meta property="og:type" content="website"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Immortal Riders"/>
+  <meta name="twitter:description" content="Ride united. Ride safe."/>
+  <meta name="twitter:image" content="assets/patch.png"/>
+  <link rel="canonical" href="https://immortalriders.ca/"/>
 
   <link rel="icon" href="assets/patch.webp"/>
   <link rel="preload" as="image" href="assets/hero-fallback.webp"/>
+  <link rel="preconnect" href="https://form.jotform.com" crossorigin/>
   <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
@@ -32,7 +38,7 @@
   <a href="#rides">Events</a>
   <a href="#intake">Join</a>
   <a href="#contact">Contact</a>
-  <a href="/spotlight.html">Spotlight</a>
+  <a href="spotlight.html">Spotlight</a>
   <a href="members/" class="nav-pill">Members</a>
 </nav>
     </div>
@@ -51,7 +57,7 @@
       <div class="cta">
         <a class="btn primary" href="members/" data-track="cta_member_login">Member Login</a>
         <a class="btn secondary" href="#rides" data-track="cta_upcoming_events">Upcoming Events</a>
-        <a class="btn tertiary" href="/spotlight.html" data-track="cta_member_spotlight">Member Spotlight</a>
+        <a class="btn tertiary" href="spotlight.html" data-track="cta_member_spotlight">Member Spotlight</a>
       </div>
       <p class="small muted" style="max-width:760px;margin:8px auto 0">New member? Complete the intake (license/insurance + waiver) in under 2 minutes.</p>
     </div>
@@ -110,10 +116,14 @@
             <h2>Events & Ride Schedule</h2>
             <p class="lead">Upcoming rides and meet‑ups. Times are local. Tap <strong>Open in Maps</strong> or download the calendar invite.</p>
           </div>
-          <button class="btn tertiary" id="copyNextRide" type="button" aria-label="Copy next ride details" data-track="copy_next_ride">Copy Next Ride</button>
+          <div class="cta" style="margin-top:0">
+            <button class="btn tertiary" id="togglePastRides" type="button" aria-pressed="false" data-track="toggle_past_rides">Show Past Events</button>
+            <button class="btn tertiary" id="copyNextRide" type="button" aria-label="Copy next ride details" data-track="copy_next_ride">Copy Next Ride</button>
+          </div>
         </div>
 
         <div id="ridesList" class="grid two" aria-live="polite"></div>
+        <p id="ridesStatus" class="small muted" style="margin-top:10px"></p>
         <p class="small muted" style="margin-top:14px">Tip: tap <strong>+ Calendar</strong> to download an .ics file that works with iPhone/Android/Outlook.</p>
       </div>
     </section>
@@ -212,6 +222,19 @@
     </div>
   </footer>
 
+  <script type="application/ld+json" id="orgSchema">
+  {
+    "@context": "https://schema.org",
+    "@type": "SportsOrganization",
+    "name": "Immortal Riders",
+    "areaServed": "Ontario, Canada",
+    "sameAs": [
+      "https://instagram.com/immortalriders",
+      "https://facebook.com/immortalriders"
+    ]
+  }
+  </script>
+
   <script>
     // --- Hero video graceful fallback (keeps poster/background if video missing) ---
     (function () {
@@ -295,6 +318,7 @@ const DEFAULT_RIDES = [
 ];
 
 let rides = [];
+let showPastRides = false;
 
 async function loadRides() {
   try {
@@ -392,7 +416,14 @@ async function initRidesUI() {
   rides = await loadRides();
   if (!ridesList) return;
 
-  ridesList.innerHTML = rides
+  rides = rides
+    .map((r) => ({ ...r, startDate: new Date(r.startLocal) }))
+    .sort((a, b) => a.startDate - b.startDate);
+
+  const now = new Date();
+  const visibleRides = showPastRides ? rides : rides.filter((r) => r.startDate >= now);
+
+  ridesList.innerHTML = visibleRides
     .map((r) => {
       const date = fmtDate(r.startLocal);
       const time = fmtTime(r.startLocal);
@@ -410,6 +441,18 @@ async function initRidesUI() {
       `;
     })
     .join('');
+
+  const ridesStatus = document.getElementById('ridesStatus');
+  if (ridesStatus) {
+    if (!visibleRides.length) {
+      ridesStatus.textContent = showPastRides
+        ? 'No events are currently listed.'
+        : 'No upcoming events right now. Toggle past events to review previous rides.';
+    } else {
+      const upcomingCount = rides.filter((r) => r.startDate >= now).length;
+      ridesStatus.textContent = `${visibleRides.length} event${visibleRides.length === 1 ? '' : 's'} shown • ${upcomingCount} upcoming`;
+    }
+  }
 
   // Wire calendar buttons
   ridesList.querySelectorAll('button[data-ics]').forEach((btn) => {
@@ -429,6 +472,16 @@ async function initRidesUI() {
 }
 
 initRidesUI();
+
+    const togglePastRidesBtn = document.getElementById('togglePastRides');
+    if (togglePastRidesBtn) {
+      togglePastRidesBtn.addEventListener('click', () => {
+        showPastRides = !showPastRides;
+        togglePastRidesBtn.setAttribute('aria-pressed', String(showPastRides));
+        togglePastRidesBtn.textContent = showPastRides ? 'Hide Past Events' : 'Show Past Events';
+        initRidesUI();
+      });
+    }
 
 
     // Copy next ride details

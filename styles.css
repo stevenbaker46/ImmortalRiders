@@ -6,6 +6,7 @@ html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:
 .navbar .container{display:flex;align-items:center;justify-content:space-between}
 .navbar a{color:var(--muted);text-decoration:none;margin:12px 10px}
 .navbar a:hover{color:var(--text)}
+.navbar a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:8px}
 .logo-mini{display:flex;align-items:center;gap:10px}
 .logo-mini img{width:34px;height:34px;border-radius:8px}
 .hero{position:relative;min-height:88svh;display:grid;place-items:center;overflow:hidden;background:#0e0f14 url('assets/hero-fallback.webp') center/cover no-repeat}
@@ -21,6 +22,7 @@ html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:
 .btn.primary{background:var(--accent);color:#fff}
 .btn.secondary{background:#20222b;color:var(--text);border:1px solid #2b2d38}
 .btn.primary:hover{filter:brightness(1.08)}
+.btn:focus-visible{outline:2px solid #fff;outline-offset:2px}
 section{padding:88px 0}
 section.alt{background:var(--surface)}
 h2{font-size:1.98rem;margin:0 0 18px}
@@ -33,6 +35,7 @@ h2{font-size:1.98rem;margin:0 0 18px}
 .ride-card{background:#0f1016;border:1px solid #2a2d39;border-radius:14px;padding:16px;box-shadow:var(--shadow);transition:transform .18s ease, box-shadow .18s ease}
 .ride-card:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.55)}
 .ride-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.ride-card em{display:inline-block;margin-top:4px}
 .pill{display:inline-flex;align-items:center;gap:6px;border:1px solid #2b2d38;border-radius:999px;padding:6px 10px;color:var(--text);text-decoration:none;background:#1a1b22}
 .pill:hover{background:#21232c}
 .embed{position:relative;border:1px solid #1b1d26;border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
