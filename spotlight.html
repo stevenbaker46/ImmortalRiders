@@ -3,62 +3,129 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Member Spotlight</title>
+  <title>Immortal Riders — Member Spotlight</title>
+  <meta name="description" content="Meet this month’s featured Immortal Riders member and highlights from the brotherhood."/>
+  <meta name="theme-color" content="#0b0b0d"/>
+
+  <meta property="og:title" content="Immortal Riders — Member Spotlight"/>
+  <meta property="og:description" content="See this month’s featured member and ride highlights."/>
+  <meta property="og:image" content="assets/spotlight.jpg"/>
+  <meta property="og:type" content="website"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Immortal Riders — Member Spotlight"/>
+  <meta name="twitter:description" content="See this month’s featured member and ride highlights."/>
+  <meta name="twitter:image" content="assets/spotlight.jpg"/>
+  <link rel="canonical" href="https://immortalriders.ca/spotlight.html"/>
+
+  <link rel="icon" href="assets/patch.webp"/>
   <link rel="stylesheet" href="styles.css"/>
   <style>
-    body{font-family:system-ui,Segoe UI,Arial;background:#0b0b0d;color:#fff;padding:40px}
-    .wrap{max-width:900px;margin:auto}
-    img{max-width:320px;border-radius:14px}
-    .card{display:grid;grid-template-columns:320px 1fr;gap:24px;align-items:start}
-    @media(max-width:700px){.card{grid-template-columns:1fr}}
+    .spotlight-wrap{padding:28px 20px 60px}
+    .spotlight-card{display:grid;grid-template-columns:320px 1fr;gap:24px;align-items:start}
+    .spotlight-photo{max-width:320px;width:100%;border-radius:14px;border:1px solid #1b1d26;background:#0f1016;aspect-ratio:4/5;object-fit:cover}
+    .month{margin:0 0 12px;color:var(--muted)}
+    .spotlight-meta{color:var(--muted);margin:0 0 12px}
+    .spotlight-quote{margin:12px 0 0;padding-left:14px;border-left:3px solid #2b2d38;color:var(--muted)}
+    .loading{display:inline-flex;align-items:center;gap:8px;color:var(--muted)}
+    @media(max-width:700px){.spotlight-card{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
-<div class="wrap">
-  <h1>Member Spotlight</h1>
-  <p id="month"></p>
-
-  <div class="card">
-    <img id="photo" alt="Spotlight member photo"/>
-    <div>
-      <h2 id="name"></h2>
-      <p id="meta"></p>
-      <p id="why"></p>
-      <ul id="highlights"></ul>
-      <blockquote id="quote"></blockquote>
+<div class="navbar" role="navigation" aria-label="Primary">
+  <div class="container">
+    <div class="logo-mini">
+      <img src="assets/patch.webp" alt="Immortal Riders patch"/>
+      <a href="index.html" aria-label="Immortal Riders Home"><strong>Immortal Riders</strong></a>
     </div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#rides">Events</a>
+      <a href="index.html#intake">Join</a>
+      <a href="index.html#contact">Contact</a>
+      <a href="spotlight.html" class="nav-pill">Spotlight</a>
+      <a href="members/" class="nav-pill">Members</a>
+    </nav>
   </div>
 </div>
 
+<main class="container spotlight-wrap" id="main">
+  <h1 style="margin:0 0 8px">Member Spotlight</h1>
+  <p id="month" class="month">Loading spotlight…</p>
+
+  <div class="card spotlight-card" id="spotlightCard" aria-live="polite">
+    <img id="photo" class="spotlight-photo" alt="Spotlight member photo" src="assets/spotlight.jpg"/>
+    <div>
+      <h2 id="name" style="margin-top:0">Featured Member</h2>
+      <p id="meta" class="spotlight-meta"></p>
+      <p id="why"></p>
+      <ul id="highlights"><li class="loading">Loading highlights…</li></ul>
+      <blockquote id="quote" class="spotlight-quote"></blockquote>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-bottom small">© <span id="year"></span> Immortal Riders • All Rights Reserved</div>
+  </div>
+</footer>
+
 <script>
+const spotlightTrack = (eventName, payload = {}) => {
+  const body = JSON.stringify({ event: eventName, payload, page: location.pathname, ts: new Date().toISOString() });
+  if (navigator.sendBeacon) navigator.sendBeacon('/analytics', body);
+  window.irAnalytics = window.irAnalytics || [];
+  window.irAnalytics.push({ event: eventName, payload, ts: Date.now() });
+};
+
 async function loadSpotlight(){
+  const monthEl = document.getElementById('month');
+  const nameEl = document.getElementById('name');
+  const metaEl = document.getElementById('meta');
+  const whyEl = document.getElementById('why');
+  const photo = document.getElementById('photo');
+  const ul = document.getElementById('highlights');
+  const q = document.getElementById('quote');
+
   try{
     const res = await fetch('data/spotlight.json',{cache:'no-store'});
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+
     const data = await res.json();
+    const member = data?.member || {};
 
-    document.getElementById('month').textContent = data.month || '';
-    document.getElementById('name').textContent = data.member.name || '';
-    document.getElementById('meta').textContent =
-      [data.member.chapter, data.member.role].filter(Boolean).join(' • ');
-    document.getElementById('why').textContent = data.member.why || '';
+    monthEl.textContent = data?.month || 'Member Spotlight';
+    nameEl.textContent = member?.name || 'Featured Member';
+    metaEl.textContent = [member?.chapter, member?.role].filter(Boolean).join(' • ');
+    whyEl.textContent = member?.why || 'More details coming soon.';
 
-    const photo = document.getElementById('photo');
-    photo.src = data.member.photo || '/assets/spotlight.jpg';
+    photo.src = member?.photo || 'assets/spotlight.jpg';
 
-    const ul = document.getElementById('highlights');
     ul.innerHTML = '';
-    (data.member.highlights || []).forEach(h=>{
-      const li=document.createElement('li');
-      li.textContent=h;
-      ul.appendChild(li);
-    });
+    const highlights = Array.isArray(member?.highlights) ? member.highlights : [];
+    if (!highlights.length) {
+      ul.innerHTML = '<li>No highlights added yet.</li>';
+    } else {
+      highlights.forEach(h => {
+        const li = document.createElement('li');
+        li.textContent = h;
+        ul.appendChild(li);
+      });
+    }
 
-    const q = document.getElementById('quote');
-    q.textContent = data.member.quote ? `“${data.member.quote}”` : '';
+    q.textContent = member?.quote ? `“${member.quote}”` : '';
+    spotlightTrack('spotlight_load_success', { member: member?.name || 'unknown' });
   }catch(e){
-    document.body.insertAdjacentHTML('beforeend','<p>Could not load spotlight.</p>');
+    monthEl.textContent = 'Member Spotlight';
+    ul.innerHTML = '<li>Could not load spotlight details right now.</li>';
+    whyEl.textContent = 'Please refresh the page in a moment.';
+    q.textContent = '';
+    spotlightTrack('spotlight_load_error', { message: String(e) });
   }
 }
+
+document.getElementById('year').textContent = new Date().getFullYear();
 loadSpotlight();
 </script>
 </body>

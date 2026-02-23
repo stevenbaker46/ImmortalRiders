@@ -12,13 +12,19 @@
   <meta property="og:description" content="Ride united. Ride safe."/>
   <meta property="og:image" content="assets/patch.png"/>
   <meta property="og:type" content="website"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Immortal Riders"/>
+  <meta name="twitter:description" content="Ride united. Ride safe."/>
+  <meta name="twitter:image" content="assets/patch.png"/>
+  <link rel="canonical" href="https://immortalriders.ca/"/>
 
   <link rel="icon" href="assets/patch.webp"/>
   <link rel="preload" as="image" href="assets/hero-fallback.webp"/>
+  <link rel="preconnect" href="https://form.jotform.com" crossorigin/>
   <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
-  <a class="skip" href="#top">Skip to content</a>
+  <a class="skip" href="#main">Skip to content</a>
 
   <div class="navbar" role="navigation" aria-label="Primary">
     <div class="container">
@@ -32,7 +38,7 @@
   <a href="#rides">Events</a>
   <a href="#intake">Join</a>
   <a href="#contact">Contact</a>
-  <a href="/spotlight.html">Spotlight</a>
+  <a href="spotlight.html">Spotlight</a>
   <a href="members/" class="nav-pill">Members</a>
 </nav>
     </div>
@@ -40,7 +46,6 @@
 
   <header id="top" class="hero" aria-label="Hero">
     <video id="heroVideo" autoplay muted loop playsinline poster="assets/hero-fallback.jpg">
-      <source src="assets/fire-hero.webm" type="video/webm"/>
       <source src="assets/fire-hero.mp4" type="video/mp4"/>
     </video>
     <div class="overlay"></div>
@@ -50,18 +55,16 @@
       <h1>IMMORTAL RIDERS</h1>
       <p class="lead">A tight crew built on loyalty, respect, and the open road. Check upcoming events or log in to the members area.</p>
       <div class="cta">
-<div class="cta">
-  <a class="btn primary" href="members/">Member Login</a>
-  <a class="btn secondary" href="#rides">Upcoming Events</a>
-  <a class="btn tertiary" href="/spotlight.html">Member Spotlight</a>
-</div>
+        <a class="btn primary" href="members/" data-track="cta_member_login">Member Login</a>
+        <a class="btn secondary" href="#rides" data-track="cta_upcoming_events">Upcoming Events</a>
+        <a class="btn tertiary" href="spotlight.html" data-track="cta_member_spotlight">Member Spotlight</a>
       </div>
       <p class="small muted" style="max-width:760px;margin:8px auto 0">New member? Complete the intake (license/insurance + waiver) in under 2 minutes.</p>
     </div>
     <div class="scroll-cue" aria-hidden="true">Scroll</div>
   </header>
 
-  <main>
+  <main id="main">
     <section id="about" class="alt">
       <div class="container">
         <h2>About the Brotherhood</h2>
@@ -113,10 +116,14 @@
             <h2>Events & Ride Schedule</h2>
             <p class="lead">Upcoming rides and meet‑ups. Times are local. Tap <strong>Open in Maps</strong> or download the calendar invite.</p>
           </div>
-          <button class="btn tertiary" id="copyNextRide" type="button" aria-label="Copy next ride details">Copy Next Ride</button>
+          <div class="cta" style="margin-top:0">
+            <button class="btn tertiary" id="togglePastRides" type="button" aria-pressed="false" data-track="toggle_past_rides">Show Past Events</button>
+            <button class="btn tertiary" id="copyNextRide" type="button" aria-label="Copy next ride details" data-track="copy_next_ride">Copy Next Ride</button>
+          </div>
         </div>
 
         <div id="ridesList" class="grid two" aria-live="polite"></div>
+        <p id="ridesStatus" class="small muted" style="margin-top:10px"></p>
         <p class="small muted" style="margin-top:14px">Tip: tap <strong>+ Calendar</strong> to download an .ics file that works with iPhone/Android/Outlook.</p>
       </div>
     </section>
@@ -124,7 +131,15 @@
     <section id="intake">
       <div class="container">
         <h2>Member Intake — Upload & Sign</h2>
-        <p class="lead">If the embedded form doesn’t load below, <a href="https://form.jotform.com/jsform/260463861533054" target="_blank" rel="noopener">open it directly</a>.</p>
+        <p class="lead">Most members finish this in about 2 minutes. If the embedded form doesn’t load below, <a href="https://form.jotform.com/jsform/260463861533054" target="_blank" rel="noopener" data-track="intake_open_direct">open it directly</a>.</p>
+        <div class="card" style="margin:0 0 16px">
+          <h3 style="margin-top:0">Before you start</h3>
+          <ul style="margin:0.3rem 0 0 1.1rem">
+            <li>Have your motorcycle license and insurance details ready</li>
+            <li>Set aside about 2 minutes for the intake + waiver</li>
+            <li>After submitting, you’ll get next-step instructions from an officer</li>
+          </ul>
+        </div>
         <div class="embed" style="padding-top:0">
           <!-- Jotform SCRIPT EMBED (required for modern upload fields) -->
           <script type="text/javascript" src="https://form.jotform.com/jsform/260463861533054"></script>
@@ -138,8 +153,8 @@
         <div class="card">
           Motorcycling involves inherent risks. By joining rides, you assume these risks, certify proper licensing/insurance, agree to obey traffic laws, and release/hold harmless Immortal Riders. Review and sign the full waiver in the form above.
           <div class="cta" style="margin-top:16px">
-            <a class="btn primary" href="#intake">Sign Waiver</a>
-            <a class="btn secondary" href="https://form.jotform.com/jsform/260463861533054" target="_blank" rel="noopener">Open in a New Tab</a>
+            <a class="btn primary" href="#intake" data-track="waiver_sign">Sign Waiver</a>
+            <a class="btn secondary" href="https://form.jotform.com/jsform/260463861533054" target="_blank" rel="noopener" data-track="waiver_open_new_tab">Open in a New Tab</a>
           </div>
         </div>
       </div>
@@ -153,19 +168,19 @@
             <h3 style="margin-top:0">General</h3>
             <p class="muted" style="margin:0 0 10px">For questions, ride info, or membership: reach out to an officer or message the club social page.</p>
             <div class="cta" style="justify-content:flex-start">
-              <a class="btn secondary" href="#intake">New Member Intake</a>
-              <a class="btn tertiary" href="members/">Members Login</a>
+              <a class="btn secondary" href="#intake" data-track="contact_new_member_intake">New Member Intake</a>
+              <a class="btn tertiary" href="members/" data-track="contact_members_login">Members Login</a>
             </div>
             <p class="small muted" style="margin-top:12px">Tip: swap the links below with your real pages.</p>
           </div>
           <div class="card">
             <h3 style="margin-top:0">Social</h3>
             <ul style="margin:.2rem 0 .2rem 1.1rem">
-              <li><a href="#" class="link">Instagram (add link)</a></li>
-              <li><a href="#" class="link">Facebook (add link)</a></li>
-              <li><a href="#" class="link">Group Chat / Discord (add link)</a></li>
+              <li><a href="https://instagram.com/immortalriders" class="link" target="_blank" rel="noopener" data-track="social_instagram">Instagram</a></li>
+              <li><a href="https://facebook.com/immortalriders" class="link" target="_blank" rel="noopener" data-track="social_facebook">Facebook</a></li>
+              <li><a href="https://discord.gg/immortalriders" class="link" target="_blank" rel="noopener" data-track="social_discord">Group Chat / Discord</a></li>
             </ul>
-            <p class="small muted" style="margin-top:10px">Want a real contact form that emails you? Tell me the address you want it to send to and I’ll wire it up.</p>
+            <p class="small muted" style="margin-top:10px">Questions? Email <a href="mailto:contact@immortalriders.ca" class="link" data-track="contact_email">contact@immortalriders.ca</a>.</p>
           </div>
         </div>
       </div>
@@ -207,6 +222,19 @@
     </div>
   </footer>
 
+  <script type="application/ld+json" id="orgSchema">
+  {
+    "@context": "https://schema.org",
+    "@type": "SportsOrganization",
+    "name": "Immortal Riders",
+    "areaServed": "Ontario, Canada",
+    "sameAs": [
+      "https://instagram.com/immortalriders",
+      "https://facebook.com/immortalriders"
+    ]
+  }
+  </script>
+
   <script>
     // --- Hero video graceful fallback (keeps poster/background if video missing) ---
     (function () {
@@ -222,12 +250,45 @@
       }, 800);
     })();
 
+    // --- Respect reduced motion ---
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      const heroVideo = document.getElementById('heroVideo');
+      if (heroVideo) {
+        heroVideo.pause();
+        heroVideo.removeAttribute('autoplay');
+      }
+    }
+
     // --- Parallax patch ---
-    const patch = document.querySelector('.hero .patch');
-    window.addEventListener('scroll', () => {
-      const y = Math.min(12, window.scrollY * 0.05);
-      if (patch) patch.style.setProperty('--parY', y + 'px');
-    }, { passive: true });
+    if (!prefersReducedMotion) {
+      const patch = document.querySelector('.hero .patch');
+      window.addEventListener('scroll', () => {
+        const y = Math.min(12, window.scrollY * 0.05);
+        if (patch) patch.style.setProperty('--parY', y + 'px');
+      }, { passive: true });
+    }
+
+    // --- Basic event tracking hook ---
+    const track = (eventName, payload = {}) => {
+      const body = JSON.stringify({
+        event: eventName,
+        payload,
+        page: location.pathname,
+        ts: new Date().toISOString()
+      });
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon('/analytics', body);
+      }
+      window.irAnalytics = window.irAnalytics || [];
+      window.irAnalytics.push({ event: eventName, payload, ts: Date.now() });
+    };
+
+    document.querySelectorAll('[data-track]').forEach((el) => {
+      el.addEventListener('click', () => {
+        track(el.getAttribute('data-track') || 'unknown_click');
+      });
+    });
 
     // --- Ride data ---
 // Edit /data/events.json to update the schedule (easier than editing this page).
@@ -257,6 +318,7 @@ const DEFAULT_RIDES = [
 ];
 
 let rides = [];
+let showPastRides = false;
 
 async function loadRides() {
   try {
@@ -264,7 +326,24 @@ async function loadRides() {
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
     if (!Array.isArray(data)) throw new Error('events.json must be an array');
-    return data;
+    return data.filter((ride, idx) => {
+      const hasFields = ride && ride.title && ride.startLocal && ride.endLocal && ride.meet && ride.mapsQuery;
+      if (!hasFields) {
+        console.warn(`[rides] Skipping invalid event at index ${idx}: missing required fields`);
+        return false;
+      }
+      const start = new Date(ride.startLocal);
+      const end = new Date(ride.endLocal);
+      if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+        console.warn(`[rides] Skipping invalid event at index ${idx}: invalid date`);
+        return false;
+      }
+      if (end <= start) {
+        console.warn(`[rides] Skipping invalid event at index ${idx}: end must be after start`);
+        return false;
+      }
+      return true;
+    });
   } catch (err) {
     console.warn('[rides] Using DEFAULT_RIDES. Reason:', err);
     return DEFAULT_RIDES;
@@ -337,7 +416,14 @@ async function initRidesUI() {
   rides = await loadRides();
   if (!ridesList) return;
 
-  ridesList.innerHTML = rides
+  rides = rides
+    .map((r) => ({ ...r, startDate: new Date(r.startLocal) }))
+    .sort((a, b) => a.startDate - b.startDate);
+
+  const now = new Date();
+  const visibleRides = showPastRides ? rides : rides.filter((r) => r.startDate >= now);
+
+  ridesList.innerHTML = visibleRides
     .map((r) => {
       const date = fmtDate(r.startLocal);
       const time = fmtTime(r.startLocal);
@@ -356,17 +442,46 @@ async function initRidesUI() {
     })
     .join('');
 
+  const ridesStatus = document.getElementById('ridesStatus');
+  if (ridesStatus) {
+    if (!visibleRides.length) {
+      ridesStatus.textContent = showPastRides
+        ? 'No events are currently listed.'
+        : 'No upcoming events right now. Toggle past events to review previous rides.';
+    } else {
+      const upcomingCount = rides.filter((r) => r.startDate >= now).length;
+      ridesStatus.textContent = `${visibleRides.length} event${visibleRides.length === 1 ? '' : 's'} shown • ${upcomingCount} upcoming`;
+    }
+  }
+
   // Wire calendar buttons
   ridesList.querySelectorAll('button[data-ics]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const title = decodeURIComponent(btn.getAttribute('data-ics') || '');
       const ride = rides.find((x) => x.title === title);
-      if (ride) downloadICS(ride);
+      if (ride) {
+        downloadICS(ride);
+        track('ride_calendar_download', { title: ride.title });
+      }
     });
+  });
+
+  ridesList.querySelectorAll('a[href*="maps.google.com"]').forEach((link) => {
+    link.addEventListener('click', () => track('ride_open_maps', { href: link.getAttribute('href') }));
   });
 }
 
 initRidesUI();
+
+    const togglePastRidesBtn = document.getElementById('togglePastRides');
+    if (togglePastRidesBtn) {
+      togglePastRidesBtn.addEventListener('click', () => {
+        showPastRides = !showPastRides;
+        togglePastRidesBtn.setAttribute('aria-pressed', String(showPastRides));
+        togglePastRidesBtn.textContent = showPastRides ? 'Hide Past Events' : 'Show Past Events';
+        initRidesUI();
+      });
+    }
 
 
     // Copy next ride details
@@ -382,6 +497,7 @@ initRidesUI();
         const text = `Next ride: ${upcoming.title}\nWhen: ${fmtDate(upcoming.startLocal)} @ ${fmtTime(upcoming.startLocal)}\nMeet: ${upcoming.meet}`;
         try {
           await navigator.clipboard.writeText(text);
+          track('copy_next_ride_success', { title: upcoming.title });
           nextRideBtn.textContent = 'Copied';
           setTimeout(() => (nextRideBtn.textContent = 'Copy Next Ride'), 1200);
         } catch (_) {
