@@ -63,7 +63,7 @@
         [data.member?.chapter ? `Chapter: ${data.member.chapter}` : ""].filter(Boolean).join(" • ");
 
       const photo = document.getElementById("photo");
-      photo.src = data.member?.photo || "assets/hero-fallback.jpg";
+      photo.src = (data.member?.photo?.startsWith('/') ? data.member.photo : '/' + (data.member?.photo || 'assets/hero-fallback.jpg'));
 
       document.getElementById("why").textContent = data.member?.why || "";
 
