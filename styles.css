@@ -68,3 +68,8 @@ html.no-hero-video .hero video{display:none}
 /* Make pill buttons look like links */
 button.pill{cursor:pointer;font:inherit}
 button.pill{color:var(--text)}
+
+@media (prefers-reduced-motion: reduce){
+  html,body{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
