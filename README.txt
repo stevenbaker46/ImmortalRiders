@@ -10,3 +10,14 @@ IMMORTAL RIDERS — SPOTLIGHT QUICK START
    git push
 
 Netlify will auto-deploy.
+
+
+PHASE 2 CONTENT QA
+
+Run this before committing content changes:
+
+   node scripts/validate-content.mjs
+
+This validates:
+- data/events.json required fields and time ordering
+- data/spotlight.json required spotlight fields
