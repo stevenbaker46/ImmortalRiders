@@ -31,6 +31,11 @@
 </div>
 
 <script>
+function resolveAssetPath(path){
+  if(!path) return 'assets/spotlight.jpg';
+  return path.startsWith('/') ? path.slice(1) : path;
+}
+
 async function loadSpotlight(){
   try{
     const res = await fetch('data/spotlight.json',{cache:'no-store'});
@@ -43,7 +48,19 @@ async function loadSpotlight(){
     document.getElementById('why').textContent = data.member.why || '';
 
     const photo = document.getElementById('photo');
-    photo.src = data.member.photo || '/assets/spotlight.jpg';
+    const photoCandidates = [
+      resolveAssetPath(data.member.photo),
+      'assets/spotlight.jpg',
+      'assets/spotlight.jpg.jpg'
+    ];
+    let photoIndex = 0;
+    photo.onerror = () => {
+      photoIndex += 1;
+      if (photoIndex < photoCandidates.length) {
+        photo.src = photoCandidates[photoIndex];
+      }
+    };
+    photo.src = photoCandidates[photoIndex];
 
     const ul = document.getElementById('highlights');
     ul.innerHTML = '';
