@@ -45,7 +45,7 @@
     </video>
     <div class="overlay"></div>
     <div class="inner container">
-      <img class="patch" src="assets/patch.webp" alt="Immortal Riders logo"/>
+      <img class="patch" src="assets/patch.png" alt="Immortal Riders Brotherhood logo" id="heroPatch"/>
       <span class="badge">FOUNDED 2026 • BROTHERHOOD ABOVE ALL</span>
       <h1>IMMORTAL RIDERS</h1>
       <p class="lead">A tight crew built on loyalty, respect, and the open road. Check upcoming events or log in to the members area.</p>
@@ -222,11 +222,24 @@
       }, 800);
     })();
 
+
+    // --- Hero photo source (text-only asset to avoid binary file commits) ---
+    (async () => {
+      const heroPatch = document.getElementById('heroPatch');
+      if (!heroPatch) return;
+      try {
+        const res = await fetch('assets/hero-photo.txt', { cache: 'force-cache' });
+        if (!res.ok) return;
+        const b64 = (await res.text()).trim();
+        if (b64) heroPatch.src = `data:image/jpeg;base64,${b64}`;
+      } catch (_) {}
+    })();
+
     // --- Parallax patch ---
     const patch = document.querySelector('.hero .patch');
     window.addEventListener('scroll', () => {
-      const y = Math.min(12, window.scrollY * 0.05);
-      if (patch) patch.style.setProperty('--parY', y + 'px');
+      const y = Math.min(8, window.scrollY * 0.04);
+      if (patch) patch.style.setProperty('--parY', (-y) + 'px');
     }, { passive: true });
 
     // --- Ride data ---
