@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Immortal Riders — Content Studio</title>
+  <meta name="description" content="Admin-friendly content editor for events and member spotlight JSON."/>
+  <link rel="icon" href="../assets/patch.webp"/>
+  <link rel="stylesheet" href="../styles.css"/>
+  <style>
+    .studio{padding:28px 20px 60px}
+    .studio-head{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+    .studio-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    @media(max-width:1000px){.studio-grid{grid-template-columns:1fr}}
+    .panel{display:grid;gap:10px}
+    textarea{width:100%;min-height:360px;background:#0c0d12;color:var(--text);border:1px solid #1b1d26;border-radius:12px;padding:12px;font:13px/1.45 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
+    textarea:focus{border-color:rgba(198,40,40,.7);box-shadow:0 0 0 3px rgba(198,40,40,.12);outline:none}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .status{font-size:13px;color:var(--muted)}
+    .ok{color:#bfffbf}
+    .err{color:#ffb4b4}
+  </style>
+</head>
+<body>
+  <div class="navbar" role="navigation" aria-label="Primary">
+    <div class="container">
+      <div class="logo-mini">
+        <img src="../assets/patch.webp" alt="Immortal Riders patch"/>
+        <a href="../index.html" aria-label="Immortal Riders Home"><strong>Immortal Riders</strong></a>
+      </div>
+      <nav>
+        <a href="../index.html">Home</a>
+        <a href="../spotlight.html">Spotlight</a>
+        <a href="../members/">Members</a>
+        <a href="./index.html" class="nav-pill">Content Studio</a>
+      </nav>
+    </div>
+  </div>
+
+  <main class="container studio">
+    <div class="studio-head">
+      <div>
+        <h1 style="margin:0 0 6px">Phase 3 — Content Studio</h1>
+        <p class="muted" style="margin:0">Edit, validate, and download updated <code>data/events.json</code> and <code>data/spotlight.json</code>.</p>
+      </div>
+      <a class="btn secondary" href="../index.html">← Back to Site</a>
+    </div>
+
+    <div class="card" style="margin-bottom:16px">
+      <div class="row">
+        <button id="loadBtn" class="btn tertiary" type="button">Reload From Current Site Data</button>
+        <button id="validateBtn" class="btn secondary" type="button">Validate Content</button>
+      </div>
+      <p id="status" class="status" style="margin:8px 0 0">Ready.</p>
+    </div>
+
+    <section class="studio-grid">
+      <div class="card panel">
+        <h2 style="margin:0">Events JSON</h2>
+        <p class="muted" style="margin:0">Edit ride schedule data for <code>data/events.json</code>.</p>
+        <textarea id="eventsJson" spellcheck="false" aria-label="Events JSON editor"></textarea>
+        <div class="row">
+          <button id="downloadEvents" class="btn" type="button">Download events.json</button>
+        </div>
+      </div>
+
+      <div class="card panel">
+        <h2 style="margin:0">Spotlight JSON</h2>
+        <p class="muted" style="margin:0">Edit feature member content for <code>data/spotlight.json</code>.</p>
+        <textarea id="spotlightJson" spellcheck="false" aria-label="Spotlight JSON editor"></textarea>
+        <div class="row">
+          <button id="downloadSpotlight" class="btn" type="button">Download spotlight.json</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const eventsEl = document.getElementById('eventsJson');
+    const spotlightEl = document.getElementById('spotlightJson');
+    const statusEl = document.getElementById('status');
+
+    function status(msg, kind=''){
+      statusEl.className = `status ${kind}`;
+      statusEl.textContent = msg;
+    }
+
+    function downloadText(filename, text) {
+      const blob = new Blob([text], { type: 'application/json;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    async function loadCurrent() {
+      status('Loading current JSON files...');
+      try {
+        const [ev, sp] = await Promise.all([
+          fetch('../data/events.json', { cache: 'no-store' }),
+          fetch('../data/spotlight.json', { cache: 'no-store' })
+        ]);
+        if (!ev.ok || !sp.ok) throw new Error('Could not fetch one or more JSON files');
+
+        const [events, spotlight] = await Promise.all([ev.json(), sp.json()]);
+        eventsEl.value = JSON.stringify(events, null, 2) + '\n';
+        spotlightEl.value = JSON.stringify(spotlight, null, 2) + '\n';
+        status('Loaded current JSON successfully.', 'ok');
+      } catch (e) {
+        status('Load failed: ' + e.message, 'err');
+      }
+    }
+
+    function validateEvents(events) {
+      if (!Array.isArray(events)) throw new Error('events.json must be an array.');
+      const titles = new Set();
+      events.forEach((e, i) => {
+        ['title','startLocal','endLocal','meet','mapsQuery'].forEach((k) => {
+          if (!e[k] || typeof e[k] !== 'string') throw new Error(`events[${i}].${k} must be a non-empty string.`);
+        });
+        if (titles.has(e.title)) throw new Error(`Duplicate event title: ${e.title}`);
+        titles.add(e.title);
+        const start = new Date(e.startLocal);
+        const end = new Date(e.endLocal);
+        if (Number.isNaN(start.valueOf()) || Number.isNaN(end.valueOf())) throw new Error(`events[${i}] has invalid date/time.`);
+        if (end <= start) throw new Error(`events[${i}] endLocal must be after startLocal.`);
+      });
+    }
+
+    function validateSpotlight(data) {
+      if (!data || typeof data !== 'object') throw new Error('spotlight.json must be an object.');
+      if (!data.month || typeof data.month !== 'string') throw new Error('spotlight.month is required.');
+      const m = data.member;
+      if (!m || typeof m !== 'object') throw new Error('spotlight.member is required.');
+      ['name','chapter','role','photo','why'].forEach((k) => {
+        if (!m[k] || typeof m[k] !== 'string') throw new Error(`spotlight.member.${k} is required.`);
+      });
+      if (!Array.isArray(m.highlights) || !m.highlights.length) throw new Error('spotlight.member.highlights must be a non-empty array.');
+      if (typeof m.quote !== 'string') throw new Error('spotlight.member.quote must be a string.');
+    }
+
+    function validateAll() {
+      try {
+        const events = JSON.parse(eventsEl.value);
+        const spotlight = JSON.parse(spotlightEl.value);
+        validateEvents(events);
+        validateSpotlight(spotlight);
+        status('Validation passed. You can download and replace files in /data.', 'ok');
+      } catch (e) {
+        status('Validation failed: ' + e.message, 'err');
+      }
+    }
+
+    document.getElementById('loadBtn').addEventListener('click', loadCurrent);
+    document.getElementById('validateBtn').addEventListener('click', validateAll);
+    document.getElementById('downloadEvents').addEventListener('click', () => {
+      try {
+        const parsed = JSON.parse(eventsEl.value);
+        downloadText('events.json', JSON.stringify(parsed, null, 2) + '\n');
+        status('Downloaded events.json', 'ok');
+      } catch (e) {
+        status('Cannot download events.json: invalid JSON.', 'err');
+      }
+    });
+    document.getElementById('downloadSpotlight').addEventListener('click', () => {
+      try {
+        const parsed = JSON.parse(spotlightEl.value);
+        downloadText('spotlight.json', JSON.stringify(parsed, null, 2) + '\n');
+        status('Downloaded spotlight.json', 'ok');
+      } catch (e) {
+        status('Cannot download spotlight.json: invalid JSON.', 'err');
+      }
+    });
+
+    loadCurrent();
+  </script>
+</body>
+</html>
