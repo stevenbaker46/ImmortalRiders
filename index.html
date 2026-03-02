@@ -212,7 +212,6 @@
     </div>
   </footer>
 
-  <script src="assets/hero-photo-loader.js" defer></script>
   <script>
     // --- Hero video graceful fallback (keeps poster/background if video missing) ---
     (function () {
@@ -228,12 +227,11 @@
       }, 800);
     })();
 
-
     // --- Parallax patch ---
     const patch = document.querySelector('.hero .patch');
     window.addEventListener('scroll', () => {
-      const y = Math.min(8, window.scrollY * 0.04);
-      if (patch) patch.style.setProperty('--parY', (-y) + 'px');
+      const y = Math.min(12, window.scrollY * 0.05);
+      if (patch) patch.style.setProperty('--parY', y + 'px');
     }, { passive: true });
 
     // --- Ride data ---
