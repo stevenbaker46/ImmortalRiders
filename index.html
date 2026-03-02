@@ -217,6 +217,7 @@
     </div>
   </footer>
 
+  <script src="assets/hero-photo-loader.js" defer></script>
   <script>
     // --- Hero video graceful fallback (keeps poster/background if video missing) ---
     (function () {
@@ -232,17 +233,6 @@
       }, 800);
     })();
 
-    // --- Hero photo source (text-only asset to avoid binary file commits) ---
-    (async () => {
-      const heroPatch = document.getElementById('heroPatch');
-      if (!heroPatch) return;
-      try {
-        const res = await fetch('assets/hero-photo.txt', { cache: 'force-cache' });
-        if (!res.ok) return;
-        const b64 = (await res.text()).trim();
-        if (b64) heroPatch.src = `data:image/jpeg;base64,${b64}`;
-      } catch (_) {}
-    })();
 
     // --- Parallax patch ---
     const patch = document.querySelector('.hero .patch');
