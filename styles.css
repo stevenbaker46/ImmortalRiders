@@ -68,3 +68,25 @@ html.no-hero-video .hero video{display:none}
 /* Make pill buttons look like links */
 button.pill{cursor:pointer;font:inherit}
 button.pill{color:var(--text)}
+
+
+/* Accessibility: visible keyboard focus */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgba(198,40,40,.95);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(198,40,40,.22);
+}
+
+/* Reduce motion for users who prefer less animation */
+@media (prefers-reduced-motion: reduce) {
+  html, body { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
