@@ -45,16 +45,14 @@
     </video>
     <div class="overlay"></div>
     <div class="inner container">
-      <img class="patch" src="assets/patch.webp" alt="Immortal Riders logo"/>
+      <img class="patch" src="assets/patch.png" alt="Immortal Riders Brotherhood logo" id="heroPatch"/>
       <span class="badge">FOUNDED 2026 • BROTHERHOOD ABOVE ALL</span>
       <h1>IMMORTAL RIDERS</h1>
       <p class="lead">A tight crew built on loyalty, respect, and the open road. Check upcoming events or log in to the members area.</p>
       <div class="cta">
-<div class="cta">
-  <a class="btn primary" href="members/">Member Login</a>
-  <a class="btn secondary" href="#rides">Upcoming Events</a>
-  <a class="btn tertiary" href="/spotlight.html">Member Spotlight</a>
-</div>
+        <a class="btn primary" href="members/">Member Login</a>
+        <a class="btn secondary" href="#rides">Upcoming Events</a>
+        <a class="btn tertiary" href="/spotlight.html">Member Spotlight</a>
       </div>
       <p class="small muted" style="max-width:760px;margin:8px auto 0">New member? Complete the intake (license/insurance + waiver) in under 2 minutes.</p>
     </div>
@@ -207,6 +205,7 @@
     </div>
   </footer>
 
+  <script src="assets/hero-photo-loader.js" defer></script>
   <script>
     // --- Hero video graceful fallback (keeps poster/background if video missing) ---
     (function () {
@@ -222,11 +221,12 @@
       }, 800);
     })();
 
+
     // --- Parallax patch ---
     const patch = document.querySelector('.hero .patch');
     window.addEventListener('scroll', () => {
-      const y = Math.min(12, window.scrollY * 0.05);
-      if (patch) patch.style.setProperty('--parY', y + 'px');
+      const y = Math.min(8, window.scrollY * 0.04);
+      if (patch) patch.style.setProperty('--parY', (-y) + 'px');
     }, { passive: true });
 
     // --- Ride data ---
