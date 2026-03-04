@@ -3,15 +3,16 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Member Spotlight</title>
+  <title>Dedication to Our Founder</title>
   <link rel="stylesheet" href="styles.css"/>
   <style>
-    body{font-family:system-ui,Segoe UI,Arial;background:#0b0b0d;color:#fff;padding:40px}
-    .wrap{max-width:900px;margin:auto}
-    .top-actions{margin-bottom:18px}
-    img{max-width:320px;border-radius:14px}
-    .card{display:grid;grid-template-columns:320px 1fr;gap:24px;align-items:start}
-    @media(max-width:700px){.card{grid-template-columns:1fr}}
+    body {font-family: system-ui, Segoe UI, Arial; background: #0b0b0d; color: #fff; padding: 40px}
+    .wrap {max-width: 900px; margin: auto}
+    .top-actions {margin-bottom: 18px}
+    .card {padding: 26px}
+    .card p {line-height: 1.7}
+    .founder-photo {margin: 10px 0 18px}
+    .founder-photo img {width:min(100%,420px);aspect-ratio:4/5;object-fit:cover;border:1px solid rgba(255,255,255,.2);border-radius:14px;display:block}
   </style>
 </head>
 <body>
@@ -19,51 +20,35 @@
   <div class="top-actions">
     <a class="btn secondary" href="/index.html">← Back to Home</a>
   </div>
-  <h1>Member Spotlight</h1>
-  <p id="month"></p>
+
+  <h1>Dedication to Our Founder</h1>
+
+  <div class="founder-photo">
+    <img src="/assets/cash-founder.jpg" alt="Founder Cash" loading="lazy"/>
+  </div>
 
   <div class="card">
-    <img id="photo" alt="Spotlight member photo"/>
-    <div>
-      <h2 id="name"></h2>
-      <p id="meta"></p>
-      <p id="why"></p>
-      <ul id="highlights"></ul>
-      <blockquote id="quote"></blockquote>
-    </div>
+    <p>Great organizations are not formed by chance. They are built by individuals who understand the value of purpose, discipline, and people.</p>
+
+    <p>Cash founded the Immortal Riders with a clear and deliberate vision: to create a community of motorcycle enthusiasts bound together by genuine character, shared passion for the ride, and a commitment to sincere brotherhood. From the beginning, the mission was never about titles or image, it was about building something real that members could stand behind with pride.</p>
+
+    <p>The Immortal Riders were established as an independent riding community with no affiliation to any traditional motorcycle club structure. That independence matters. It reflects a conscious decision to focus on unity, accountability, and respect among riders who simply share the road and the mindset.</p>
+
+    <p>Cash’s leadership style is steady and intentional. He leads with quiet confidence, clear expectations, and a standard of respect for the road, for the brotherhood, and for every individual who commits their time and energy to the group. His belief has always been that strong culture is built through consistent actions, not loud words.</p>
+
+    <p>Because of that foundation, the Immortal Riders continue to grow as a tight, disciplined, and welcoming community of riders who value what the group stands for.</p>
+
+    <p>The principles remain simple and firm:</p>
+    <ul>
+      <li>Ride together</li>
+      <li>Support one another</li>
+      <li>Carry yourself with respect</li>
+      <li>Represent the brotherhood properly</li>
+    </ul>
+
+    <p>What began as one rider’s vision has become a unified circle of dedicated motorcycle enthusiasts connected through Belief, strengthened by sincere brotherhood, and guided by the standard Cash set from day one.</p>
+
   </div>
 </div>
-
-<script>
-async function loadSpotlight(){
-  try{
-    const res = await fetch('data/spotlight.json',{cache:'no-store'});
-    const data = await res.json();
-
-    document.getElementById('month').textContent = data.month || '';
-    document.getElementById('name').textContent = data.member.name || '';
-    document.getElementById('meta').textContent =
-      [data.member.chapter, data.member.role].filter(Boolean).join(' • ');
-    document.getElementById('why').textContent = data.member.why || '';
-
-    const photo = document.getElementById('photo');
-    photo.src = data.member.photo || '/assets/spotlight.jpg';
-
-    const ul = document.getElementById('highlights');
-    ul.innerHTML = '';
-    (data.member.highlights || []).forEach(h=>{
-      const li=document.createElement('li');
-      li.textContent=h;
-      ul.appendChild(li);
-    });
-
-    const q = document.getElementById('quote');
-    q.textContent = data.member.quote ? `“${data.member.quote}”` : '';
-  }catch(e){
-    document.body.insertAdjacentHTML('beforeend','<p>Could not load spotlight.</p>');
-  }
-}
-loadSpotlight();
-</script>
 </body>
 </html>
