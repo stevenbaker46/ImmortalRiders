@@ -41,7 +41,7 @@
     <div class="studio-head">
       <div>
         <h1 style="margin:0 0 6px">Phase 3 — Content Studio</h1>
-        <p class="muted" style="margin:0">Edit, validate, and download updated <code>data/events.json</code> and <code>data/spotlight.json</code>.</p>
+        <p class="muted" style="margin:0">Edit, validate, and download updated <code>data/spotlight.json</code>.</p>
       </div>
       <a class="btn secondary" href="../index.html">← Back to Site</a>
     </div>
@@ -54,15 +54,8 @@
       <p id="status" class="status" style="margin:8px 0 0">Ready.</p>
     </div>
 
-    <section class="studio-grid">
-      <div class="card panel">
-        <h2 style="margin:0">Events JSON</h2>
-        <p class="muted" style="margin:0">Edit ride schedule data for <code>data/events.json</code>.</p>
-        <textarea id="eventsJson" spellcheck="false" aria-label="Events JSON editor"></textarea>
-        <div class="row">
-          <button id="downloadEvents" class="btn" type="button">Download events.json</button>
-        </div>
-      </div>
+    <section>
+      
 
       <div class="card panel">
         <h2 style="margin:0">Spotlight JSON</h2>
@@ -76,7 +69,6 @@
   </main>
 
   <script>
-    const eventsEl = document.getElementById('eventsJson');
     const spotlightEl = document.getElementById('spotlightJson');
     const statusEl = document.getElementById('status');
 
@@ -98,37 +90,16 @@
     }
 
     async function loadCurrent() {
-      status('Loading current JSON files...');
+      status('Loading current spotlight JSON...');
       try {
-        const [ev, sp] = await Promise.all([
-          fetch('../data/events.json', { cache: 'no-store' }),
-          fetch('../data/spotlight.json', { cache: 'no-store' })
-        ]);
-        if (!ev.ok || !sp.ok) throw new Error('Could not fetch one or more JSON files');
-
-        const [events, spotlight] = await Promise.all([ev.json(), sp.json()]);
-        eventsEl.value = JSON.stringify(events, null, 2) + '\n';
+        const sp = await fetch('../data/spotlight.json', { cache: 'no-store' });
+        if (!sp.ok) throw new Error('Could not fetch spotlight.json');
+        const spotlight = await sp.json();
         spotlightEl.value = JSON.stringify(spotlight, null, 2) + '\n';
-        status('Loaded current JSON successfully.', 'ok');
+        status('Loaded current spotlight JSON successfully.', 'ok');
       } catch (e) {
         status('Load failed: ' + e.message, 'err');
       }
-    }
-
-    function validateEvents(events) {
-      if (!Array.isArray(events)) throw new Error('events.json must be an array.');
-      const titles = new Set();
-      events.forEach((e, i) => {
-        ['title','startLocal','endLocal','meet','mapsQuery'].forEach((k) => {
-          if (!e[k] || typeof e[k] !== 'string') throw new Error(`events[${i}].${k} must be a non-empty string.`);
-        });
-        if (titles.has(e.title)) throw new Error(`Duplicate event title: ${e.title}`);
-        titles.add(e.title);
-        const start = new Date(e.startLocal);
-        const end = new Date(e.endLocal);
-        if (Number.isNaN(start.valueOf()) || Number.isNaN(end.valueOf())) throw new Error(`events[${i}] has invalid date/time.`);
-        if (end <= start) throw new Error(`events[${i}] endLocal must be after startLocal.`);
-      });
     }
 
     function validateSpotlight(data) {
@@ -145,9 +116,7 @@
 
     function validateAll() {
       try {
-        const events = JSON.parse(eventsEl.value);
         const spotlight = JSON.parse(spotlightEl.value);
-        validateEvents(events);
         validateSpotlight(spotlight);
         status('Validation passed. You can download and replace files in /data.', 'ok');
       } catch (e) {
@@ -157,15 +126,6 @@
 
     document.getElementById('loadBtn').addEventListener('click', loadCurrent);
     document.getElementById('validateBtn').addEventListener('click', validateAll);
-    document.getElementById('downloadEvents').addEventListener('click', () => {
-      try {
-        const parsed = JSON.parse(eventsEl.value);
-        downloadText('events.json', JSON.stringify(parsed, null, 2) + '\n');
-        status('Downloaded events.json', 'ok');
-      } catch (e) {
-        status('Cannot download events.json: invalid JSON.', 'err');
-      }
-    });
     document.getElementById('downloadSpotlight').addEventListener('click', () => {
       try {
         const parsed = JSON.parse(spotlightEl.value);
