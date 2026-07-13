@@ -110,13 +110,16 @@
         <div class="rides-head">
           <div>
             <h2>Events & Ride Schedule</h2>
-            <p class="lead">Upcoming rides and meet‑ups. Times are local. Tap <strong>Open in Maps</strong> or download the calendar invite.</p>
+            <p class="lead">Upcoming rides and meet-ups from our Google Calendar. If it does not load, use the direct link below.</p>
           </div>
-          <button class="btn tertiary" id="copyNextRide" type="button" aria-label="Copy next ride details">Copy Next Ride</button>
         </div>
 
-        <div id="ridesList" class="grid two" aria-live="polite"></div>
-        <p class="small muted" style="margin-top:14px">Tip: tap <strong>+ Calendar</strong> to download an .ics file that works with iPhone/Android/Outlook.</p>
+        <div class="card calendar-wrap">
+          <iframe src="https://calendar.google.com/calendar/embed?src=90c54267ad3330d2771b0aca5e8b0c4db9b0e08f812ff99d8a3a1a0001fdf72e%40group.calendar.google.com&amp;ctz=America%2FToronto" style="border:0" width="100%" height="600" frameborder="0" scrolling="no" title="Immortal Riders Google Calendar"></iframe>
+          <div class="cta" style="justify-content:flex-start;margin-top:14px">
+            <a class="btn secondary" href="https://calendar.google.com/calendar/embed?src=90c54267ad3330d2771b0aca5e8b0c4db9b0e08f812ff99d8a3a1a0001fdf72e%40group.calendar.google.com&amp;ctz=America%2FToronto" target="_blank" rel="noopener">Open Google Calendar</a>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -222,167 +225,6 @@
       const y = Math.min(8, window.scrollY * 0.04);
       if (patch) patch.style.setProperty('--parY', (-y) + 'px');
     }, { passive: true });
-
-    // --- Ride data ---
-// Edit /data/events.json to update the schedule (easier than editing this page).
-// If the JSON can't be loaded, we fall back to this default list.
-const DEFAULT_RIDES = [
-  {
-    title: 'Season Opener: Lakeshore Loop',
-    startLocal: '2026-03-01T10:00',
-    endLocal: '2026-03-01T12:00',
-    meet: 'Tim Hortons, 123 King St.',
-    mapsQuery: 'Tim Hortons 123 King St'
-  },
-  {
-    title: 'Niagara Parkway Run',
-    startLocal: '2026-03-14T09:30',
-    endLocal: '2026-03-14T12:00',
-    meet: 'Shell at QEW & 50 Rd',
-    mapsQuery: 'Shell QEW and 50 Rd'
-  },
-  {
-    title: 'Forks of the Credit',
-    startLocal: '2026-03-28T11:00',
-    endLocal: '2026-03-28T14:00',
-    meet: 'Starbucks, 456 Queen St.',
-    mapsQuery: 'Starbucks 456 Queen St'
-  }
-];
-
-let rides = [];
-
-async function loadRides() {
-  try {
-    const res = await fetch('data/events.json', { cache: 'no-store' });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-    if (!Array.isArray(data)) throw new Error('events.json must be an array');
-    return data;
-  } catch (err) {
-    console.warn('[rides] Using DEFAULT_RIDES. Reason:', err);
-    return DEFAULT_RIDES;
-  }
-}
-
-    const fmtDate = (isoLocal) => {
-      const d = new Date(isoLocal);
-      return d.toLocaleString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
-    };
-
-    const fmtTime = (isoLocal) => {
-      const d = new Date(isoLocal);
-      return d.toLocaleString(undefined, { hour: 'numeric', minute: '2-digit' });
-    };
-
-    const icsDate = (d) => {
-      // iCalendar in local time (floating) so phone imports as local
-      const pad = (n) => String(n).padStart(2, '0');
-      return (
-        d.getFullYear() +
-        pad(d.getMonth() + 1) +
-        pad(d.getDate()) +
-        'T' +
-        pad(d.getHours()) +
-        pad(d.getMinutes()) +
-        '00'
-      );
-    };
-
-    const makeICS = (ride) => {
-      const start = new Date(ride.startLocal);
-      const end = new Date(ride.endLocal);
-      const uid = `${ride.startLocal}-${ride.title}`.replace(/[^a-z0-9\-]/gi, '') + '@immortal-riders';
-      const lines = [
-        'BEGIN:VCALENDAR',
-        'VERSION:2.0',
-        'PRODID:-//Immortal Riders//Ride Schedule//EN',
-        'CALSCALE:GREGORIAN',
-        'METHOD:PUBLISH',
-        'BEGIN:VEVENT',
-        `UID:${uid}`,
-        `DTSTAMP:${icsDate(new Date())}`,
-        `DTSTART:${icsDate(start)}`,
-        `DTEND:${icsDate(end)}`,
-        `SUMMARY:${ride.title}`,
-        `LOCATION:${ride.meet}`,
-        `DESCRIPTION:Meet at ${ride.meet}`,
-        'END:VEVENT',
-        'END:VCALENDAR'
-      ];
-      return lines.join('\r\n');
-    };
-
-    const downloadICS = (ride) => {
-      const blob = new Blob([makeICS(ride)], { type: 'text/calendar;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${ride.title.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}-${ride.startLocal.slice(0,10)}.ics`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    };
-
-    const ridesList = document.getElementById('ridesList');
-
-async function initRidesUI() {
-  rides = await loadRides();
-  if (!ridesList) return;
-
-  ridesList.innerHTML = rides
-    .map((r) => {
-      const date = fmtDate(r.startLocal);
-      const time = fmtTime(r.startLocal);
-      const maps = `https://maps.google.com/?q=${encodeURIComponent(r.mapsQuery)}`;
-      return `
-        <div class="ride-card">
-          <strong>${date} — ${time}</strong><br/>
-          <em>${r.title}</em><br/>
-          Meet: ${r.meet}
-          <div class="ride-actions">
-            <a class="pill" href="${maps}" target="_blank" rel="noopener">Open in Maps</a>
-            <button class="pill" type="button" data-ics="${encodeURIComponent(r.title)}" aria-label="Download calendar invite">+ Calendar</button>
-          </div>
-        </div>
-      `;
-    })
-    .join('');
-
-  // Wire calendar buttons
-  ridesList.querySelectorAll('button[data-ics]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const title = decodeURIComponent(btn.getAttribute('data-ics') || '');
-      const ride = rides.find((x) => x.title === title);
-      if (ride) downloadICS(ride);
-    });
-  });
-}
-
-initRidesUI();
-
-
-    // Copy next ride details
-    const nextRideBtn = document.getElementById('copyNextRide');
-    if (nextRideBtn) {
-      nextRideBtn.addEventListener('click', async () => {
-        const now = new Date();
-        const upcoming = rides
-          .map((r) => ({ ...r, start: new Date(r.startLocal) }))
-          .filter((r) => r.start > now)
-          .sort((a, b) => a.start - b.start)[0];
-        if (!upcoming) return;
-        const text = `Next ride: ${upcoming.title}\nWhen: ${fmtDate(upcoming.startLocal)} @ ${fmtTime(upcoming.startLocal)}\nMeet: ${upcoming.meet}`;
-        try {
-          await navigator.clipboard.writeText(text);
-          nextRideBtn.textContent = 'Copied';
-          setTimeout(() => (nextRideBtn.textContent = 'Copy Next Ride'), 1200);
-        } catch (_) {
-          alert(text);
-        }
-      });
-    }
 
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
